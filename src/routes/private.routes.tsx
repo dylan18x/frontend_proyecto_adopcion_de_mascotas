@@ -9,6 +9,11 @@ import ClientesPage from "../pages/private/ClientesPage";
 import VeterinariosPage from "../pages/private/VeterinariosPage";
 import MascotasPage from "../pages/private/MascotaPage";
 
+// 1. Importa tus nuevas páginas
+import RecetasPage from "../pages/private/RecetasPage";
+import VacunasPage from "../pages/private/VacunasPage";
+import VacunacionesPage from "../pages/private/VacunacionesPage";
+
 export const privateRoutes: RouteObject = {
   path: "/dashboard",
   children: [
@@ -16,6 +21,9 @@ export const privateRoutes: RouteObject = {
     { path: "clientes", element: <ClientesPage /> },
     { path: "veterinarios", element: <VeterinariosPage /> },
     { path: "mascotas", element: <MascotasPage /> },
+    { path: "recetas", element: <RecetasPage /> },
+    { path: "vacunas", element: <VacunasPage /> },
+    { path: "vacunaciones", element: <VacunacionesPage /> },
     { path: "categories", element: <CategoriesPage /> },
     { path: "posts", element: <PostsPage /> },
     { path: "forbidden", element: <Forbidden /> },
