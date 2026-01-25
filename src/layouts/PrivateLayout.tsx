@@ -23,6 +23,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices"; 
+import PetsIcon from "@mui/icons-material/Pets";
 
 const drawerWidth = 260;
 
@@ -39,6 +40,7 @@ const navItems: NavItem[] = [
   { label: "Inicio", to: "/dashboard", icon: <DashboardIcon /> },
   { label: "Clientes", to: "/dashboard/clientes", icon: <PersonIcon /> },
   { label: "Veterinarios", to: "/dashboard/veterinarios", icon: <MedicalServicesIcon /> }, 
+  { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> }, 
   { label: "Categorías", to: "/dashboard/categories", icon: <CategoryIcon /> },
   { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
   { label: "Users", to: "/dashboard/users", icon: <GroupIcon />, roles: ["ADMIN"] },

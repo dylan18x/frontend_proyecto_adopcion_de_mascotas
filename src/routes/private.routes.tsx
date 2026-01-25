@@ -7,6 +7,7 @@ import Forbidden from "../pages/private/Forbidden";
 import RequireRole from "./RequireRole";
 import ClientesPage from "../pages/private/ClientesPage";
 import VeterinariosPage from "../pages/private/VeterinariosPage";
+import MascotasPage from "../pages/private/MascotaPage";
 
 export const privateRoutes: RouteObject = {
   path: "/dashboard",
@@ -14,6 +15,7 @@ export const privateRoutes: RouteObject = {
     { index: true, element: <DashboardHome /> },
     { path: "clientes", element: <ClientesPage /> },
     { path: "veterinarios", element: <VeterinariosPage /> },
+    { path: "mascotas", element: <MascotasPage /> },
     { path: "categories", element: <CategoriesPage /> },
     { path: "posts", element: <PostsPage /> },
     { path: "forbidden", element: <Forbidden /> },
