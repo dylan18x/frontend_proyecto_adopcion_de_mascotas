@@ -1,12 +1,13 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
 import { loginApi, registerApi } from "../services/auth.service";
 
 export type AuthUser = {
-  id?: string;
+  id: number;
+  username: string;
   email?: string;
-  username?: string;
-  role?: string;
+  role: "ADMIN" | "USER";
 };
 
 type AuthContextType = {
@@ -31,31 +32,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (payload: { username: string; password: string }) => {
     const token = await loginApi(payload);
+    const decoded: any = jwtDecode(token);
+
+    const userData: AuthUser = {
+      id: decoded.sub,
+      username: decoded.username,
+      role: decoded.role,
+    };
 
     setToken(token);
-    setUser({ username: payload.username });
+    setUser(userData);
 
     localStorage.setItem("auth_token", token);
-    localStorage.setItem(
-      "auth_user",
-      JSON.stringify({ username: payload.username })
-    );
+    localStorage.setItem("auth_user", JSON.stringify(userData));
   };
 
   const register = async (payload: { username: string; email: string; password: string }) => {
     const token = await registerApi(payload);
+    const decoded: any = jwtDecode(token);
+
+    const userData: AuthUser = {
+      id: decoded.sub,
+      username: decoded.username,
+      email: payload.email,
+      role: decoded.role,
+    };
 
     setToken(token);
-    setUser({ username: payload.username, email: payload.email });
+    setUser(userData);
 
     localStorage.setItem("auth_token", token);
-    localStorage.setItem(
-      "auth_user",
-      JSON.stringify({
-        username: payload.username,
-        email: payload.email,
-      })
-    );
+    localStorage.setItem("auth_user", JSON.stringify(userData));
   };
 
   const logout = () => {

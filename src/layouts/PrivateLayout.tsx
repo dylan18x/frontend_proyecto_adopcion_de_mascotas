@@ -26,7 +26,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices"; 
 import PetsIcon from "@mui/icons-material/Pets";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 
 // --- NUEVOS ICONOS PARA TUS MÓDULOS ---

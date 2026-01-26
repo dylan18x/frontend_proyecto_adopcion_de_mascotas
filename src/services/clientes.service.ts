@@ -15,5 +15,5 @@ type PaginationResponse<T> = {
 
 export async function getClients(): Promise<ClientDto[]> {
   const { data } = await api.get<PaginationResponse<ClientDto>>("/clientes");
-  return data.items; 
+  return data.items;
 }

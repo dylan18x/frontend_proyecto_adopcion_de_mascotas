@@ -1,15 +1,5 @@
 import { api } from "./api";
 
-export type SuccessResponseDto<T> = {
-  success: true;
-  message: string;
-  data: T;
-};
-
-export type AuthTokenData = {
-  access_token: string;
-};
-
 export async function loginApi(payload: {
   username: string;
   password: string;
@@ -22,12 +12,15 @@ export async function loginApi(payload: {
   return data.access_token;
 }
 
-
 export async function registerApi(payload: {
   username: string;
   email: string;
   password: string;
 }): Promise<string> {
-  const { data } = await api.post<SuccessResponseDto<AuthTokenData>>("/auth/register", payload);
-  return data.data.access_token;
+  const { data } = await api.post<{ access_token: string }>(
+    "/auth/register",
+    payload
+  );
+
+  return data.access_token;
 }

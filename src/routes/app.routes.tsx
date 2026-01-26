@@ -7,7 +7,7 @@ import { UiProvider } from "../context/UiContext";
 
 export const appRoutes: RouteObject[] = [
   publicRoutes,
-    {
+  {
     path: "/dashboard",
     element: (
       <RequireAuth>
@@ -17,5 +17,5 @@ export const appRoutes: RouteObject[] = [
       </RequireAuth>
     ),
     children: privateRoutes.children,
-  }
+  },
 ];

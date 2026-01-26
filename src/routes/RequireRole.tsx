@@ -9,10 +9,18 @@ type Props = {
 
 export default function RequireRole({ allow, children }: Props): JSX.Element {
   const { user } = useAuth();
-  const role = (user?.role || "USER").toUpperCase();
 
-  const ok = allow.map((x) => x.toUpperCase()).includes(role);
-  if (!ok) return <Navigate to="/dashboard/forbidden" replace />;
+  if (!user || !user.role) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  const ok = allow
+    .map((r) => r.toUpperCase())
+    .includes(user.role.toUpperCase());
+
+  if (!ok) {
+    return <Navigate to="/dashboard/forbidden" replace />;
+  }
 
   return children;
 }
