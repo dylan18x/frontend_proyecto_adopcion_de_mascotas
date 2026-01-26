@@ -24,6 +24,10 @@ import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices"; 
 import PetsIcon from "@mui/icons-material/Pets";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+
 
 const drawerWidth = 260;
 
@@ -43,7 +47,12 @@ const navItems: NavItem[] = [
   { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> }, 
   { label: "Categorías", to: "/dashboard/categories", icon: <CategoryIcon /> },
   { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
+  { label: "Pagos", to: "/dashboard/pagos", icon: <PaymentsIcon /> },
+  { label: "Facturas", to: "/dashboard/facturas", icon: <ReceiptLongIcon /> },
+  { label: "Historial Médico", to: "/dashboard/historial-medico", icon: <MedicalInformationIcon /> },
   { label: "Users", to: "/dashboard/users", icon: <GroupIcon />, roles: ["ADMIN"] },
+  { label: "Tienda", to: "/dashboard/tienda", icon: <CategoryIcon /> },
+
 ];
 export default function PrivateLayout(): JSX.Element {
   const { user, logout } = useAuth();
