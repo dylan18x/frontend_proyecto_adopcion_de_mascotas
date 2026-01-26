@@ -16,6 +16,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useState, type JSX } from "react";
 import { useAuth } from "../context/AuthContext";
 
+// Iconos existentes
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -28,6 +29,10 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 
+// --- NUEVOS ICONOS PARA TUS MÓDULOS ---
+import EventIcon from "@mui/icons-material/Event";          // Para Citas
+import HealingIcon from "@mui/icons-material/Healing";      // Para Consultas
+import MedicationIcon from "@mui/icons-material/Medication"; // Para Medicamentos
 
 const drawerWidth = 260;
 
@@ -38,10 +43,11 @@ type NavItem = {
   roles?: string[];
 };
 
-
-
 const navItems: NavItem[] = [
   { label: "Inicio", to: "/dashboard", icon: <DashboardIcon /> },
+    { label: "Citas", to: "/dashboard/citas", icon: <EventIcon /> },
+  { label: "Consultas", to: "/dashboard/consultas", icon: <HealingIcon /> },
+  { label: "Medicamentos", to: "/dashboard/medicamentos", icon: <MedicationIcon /> },
   { label: "Clientes", to: "/dashboard/clientes", icon: <PersonIcon /> },
   { label: "Veterinarios", to: "/dashboard/veterinarios", icon: <MedicalServicesIcon /> }, 
   { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> }, 
@@ -52,8 +58,8 @@ const navItems: NavItem[] = [
   { label: "Historial Médico", to: "/dashboard/historial-medico", icon: <MedicalInformationIcon /> },
   { label: "Users", to: "/dashboard/users", icon: <GroupIcon />, roles: ["ADMIN"] },
   { label: "Tienda", to: "/dashboard/tienda", icon: <CategoryIcon /> },
-
 ];
+
 export default function PrivateLayout(): JSX.Element {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
@@ -61,6 +67,7 @@ export default function PrivateLayout(): JSX.Element {
   const location = useLocation();
 
   const role = (user?.role || "USER").toUpperCase();
+  // Filtramos los items según el rol del usuario
   const visibleItems = navItems.filter((i) => !i.roles || i.roles.map((x) => x.toUpperCase()).includes(role));
 
   const onGo = (to: string) => {
