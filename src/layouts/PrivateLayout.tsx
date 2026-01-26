@@ -25,6 +25,14 @@ import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices"; 
 import PetsIcon from "@mui/icons-material/Pets";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+
+// --- NUEVOS ICONOS PARA TUS MÓDULOS ---
+import EventIcon from "@mui/icons-material/Event";          // Para Citas
+import HealingIcon from "@mui/icons-material/Healing";      // Para Consultas
+import MedicationIcon from "@mui/icons-material/Medication"; // Para Medicamentos
 
 // Nuevos iconos para tus secciones
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong"; 
@@ -42,6 +50,9 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Inicio", to: "/dashboard", icon: <DashboardIcon /> },
+    { label: "Citas", to: "/dashboard/citas", icon: <EventIcon /> },
+  { label: "Consultas", to: "/dashboard/consultas", icon: <HealingIcon /> },
+  { label: "Medicamentos", to: "/dashboard/medicamentos", icon: <MedicationIcon /> },
   { label: "Clientes", to: "/dashboard/clientes", icon: <PersonIcon /> },
   { label: "Veterinarios", to: "/dashboard/veterinarios", icon: <MedicalServicesIcon /> }, 
   { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> }, 
@@ -50,7 +61,11 @@ const navItems: NavItem[] = [
   { label: "Vacunaciones", to: "/dashboard/vacunaciones", icon: <VaccinesIcon /> },
   { label: "Categorías", to: "/dashboard/categories", icon: <CategoryIcon /> },
   { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
+  { label: "Pagos", to: "/dashboard/pagos", icon: <PaymentsIcon /> },
+  { label: "Facturas", to: "/dashboard/facturas", icon: <ReceiptLongIcon /> },
+  { label: "Historial Médico", to: "/dashboard/historial-medico", icon: <MedicalInformationIcon /> },
   { label: "Users", to: "/dashboard/users", icon: <GroupIcon />, roles: ["ADMIN"] },
+  { label: "Tienda", to: "/dashboard/tienda", icon: <CategoryIcon /> },
 ];
 
 export default function PrivateLayout(): JSX.Element {
@@ -60,6 +75,7 @@ export default function PrivateLayout(): JSX.Element {
   const location = useLocation();
 
   const role = (user?.role || "USER").toUpperCase();
+  // Filtramos los items según el rol del usuario
   const visibleItems = navItems.filter((i) => !i.roles || i.roles.map((x) => x.toUpperCase()).includes(role));
 
   const onGo = (to: string) => {

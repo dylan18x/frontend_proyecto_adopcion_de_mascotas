@@ -8,7 +8,7 @@ export default function PublicLayout(): JSX.Element {
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
       <PublicHeader />
-
+       
       <Toolbar />
 
       <Container sx={{ py: 3 }}>
