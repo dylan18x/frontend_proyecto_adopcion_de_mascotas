@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userData: AuthUser = {
       id: decoded.sub,
       username: decoded.username,
-      role: decoded.role.toUpperCase(), // asegurar mayúscula
+      role: decoded.role.toUpperCase(), 
     };
 
     setToken(token);
