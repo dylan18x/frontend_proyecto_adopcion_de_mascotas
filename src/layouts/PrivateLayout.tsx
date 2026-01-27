@@ -10,13 +10,9 @@ import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import PetsIcon from "@mui/icons-material/Pets";
-import PaymentsIcon from "@mui/icons-material/Payments";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 import EventIcon from "@mui/icons-material/Event";
 import HealingIcon from "@mui/icons-material/Healing";
-import MedicationIcon from "@mui/icons-material/Medication";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 
 const drawerWidth = 260;

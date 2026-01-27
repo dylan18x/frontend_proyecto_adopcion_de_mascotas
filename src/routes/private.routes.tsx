@@ -1,6 +1,5 @@
 import type { RouteObject } from "react-router-dom";
 import DashboardHome from "../pages/private/DashboardHome";
-import CategoriesPage from "../pages/private/CategoriesPage";
 import PostsPage from "../pages/private/PostsPage";
 import UsersPage from "../pages/admin/UsersPage";
 import Forbidden from "../pages/private/Forbidden";
