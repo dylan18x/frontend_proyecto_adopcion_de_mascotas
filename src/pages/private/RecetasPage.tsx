@@ -1,98 +1,131 @@
-import { useEffect, useState, useMemo } from "react";
-import { getRecetas, type RecetaDto } from "../../services/recetas.service";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
+
+interface Receta {
+  id: string;
+  dosis: string;
+  duracion: string;
+  medicamento?: { nombre: string };
+  consulta?: { 
+    diagnostico: string;
+    mascota?: { nombre: string };
+  };
+}
 
 export default function RecetasPage() {
-  const [recetas, setRecetas] = useState<RecetaDto[]>([]);
-  const [search, setSearch] = useState("");
+  const [recetas, setRecetas] = useState<Receta[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filtro, setFiltro] = useState(""); // Estado para el buscador
 
   useEffect(() => {
-    getRecetas()
-      .then((data) => {
-        if (data) setRecetas(data);
-      })
-      .finally(() => setLoading(false));
+    const cargarRecetas = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/recetas");
+        const data = response.data.items || response.data || [];
+        setRecetas(data);
+      } catch (error) {
+        console.error("Error al cargar recetas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarRecetas();
   }, []);
 
-  const filteredRecetas = useMemo(() => {
-    const list = recetas || [];
-    const term = search.toLowerCase();
+  // Lógica del filtro: Busca por nombre de mascota o nombre de medicamento
+  const recetasFiltradas = recetas.filter((r) => {
+    const busqueda = filtro.toLowerCase();
+    const nombreMascota = r.consulta?.mascota?.nombre?.toLowerCase() || "";
+    const nombreMedicamento = r.medicamento?.nombre?.toLowerCase() || "";
+    const diagnostico = r.consulta?.diagnostico?.toLowerCase() || "";
 
-    return list.filter(r => 
-      r.medicamento?.nombre?.toLowerCase().includes(term) ||
-      r.consulta?.motivo?.toLowerCase().includes(term) ||
-      r.duracion?.toLowerCase().includes(term)
+    return (
+      nombreMascota.includes(busqueda) || 
+      nombreMedicamento.includes(busqueda) ||
+      diagnostico.includes(busqueda)
     );
-  }, [recetas, search]);
+  });
 
   return (
-    <div className="container py-5">
-      <div className="row mb-4 align-items-center">
-        <div className="col-md-7">
-          <h1 className="h2" style={{ color: '#2d6a4f' }}>📝 Recetas Médicas</h1>
-          <p className="text-muted">Control de tratamientos y medicación</p>
+    <div className="container mt-4">
+      <div className="row align-items-center mb-4">
+        <div className="col-md-6">
+          <h2 className="text-primary fw-bold mb-0">📋 Mis Recetas Médicas</h2>
         </div>
-        <div className="col-md-5">
+        <div className="col-md-6 mt-3 mt-md-0">
           <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white border-end-0">🔍</span>
-            <input 
-              type="text" 
-              className="form-control border-start-0" 
-              placeholder="Buscar por medicamento o consulta..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+            <span className="input-group-text bg-white border-end-0">
+              🔍
+            </span>
+            <input
+              type="text"
+              className="form-control border-start-0 ps-0"
+              placeholder="Buscar por mascota, medicamento o diagnóstico..."
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
             />
           </div>
         </div>
       </div>
 
-      <div className="card border-0 shadow-sm overflow-hidden">
-        <div className="table-responsive">
-          <table className="table table-hover align-middle mb-0">
-            <thead style={{ backgroundColor: '#d8f3dc' }}>
-              <tr>
-                <th className="px-4 py-3">Medicamento</th>
-                <th className="py-3">Dosis</th>
-                <th className="py-3">Duración</th>
-                <th className="py-3">Motivo de Consulta</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={4} className="text-center py-5 text-muted">
-                    <div className="spinner-border spinner-border-sm me-2" role="status"></div>
-                    Cargando recetas...
-                  </td>
-                </tr>
-              ) : filteredRecetas.length > 0 ? (
-                filteredRecetas.map(r => (
-                  <tr key={r.id}>
-                    <td className="px-4 py-3 fw-bold text-success">
-                      {r.medicamento?.nombre || "No especificado"}
-                    </td>
-                    <td className="py-3">{r.dosis}</td>
-                    <td className="py-3">
-                      <span className="badge bg-light text-dark border">
-                        {r.duracion}
-                      </span>
-                    </td>
-                    <td className="py-3 text-muted">
-                      {r.consulta?.motivo || "Consulta General"}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="text-center py-5 text-muted">
-                    No se encontraron recetas médicas.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status"></div>
+          <p className="mt-2 text-muted">Cargando tus recetas...</p>
         </div>
-      </div>
+      ) : recetasFiltradas.length === 0 ? (
+        <div className="alert alert-light border text-center py-5 shadow-sm rounded-4">
+          <p className="mb-0 text-muted fs-5">
+            {filtro ? `No se encontraron resultados para "${filtro}"` : "Aún no hay recetas registradas."}
+          </p>
+        </div>
+      ) : (
+        <div className="row g-4">
+          {recetasFiltradas.map((r) => (
+            <div className="col-md-6 col-lg-4" key={r.id}>
+              <div className="card h-100 border-0 shadow-sm">
+                <div className="card-header bg-primary text-white py-3">
+                  <h5 className="card-title mb-0">
+                    🐶 {r.consulta?.mascota?.nombre || "Mascota"}
+                  </h5>
+                </div>
+                
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h6 className="text-uppercase text-muted small fw-bold mb-1">Medicamento</h6>
+                    <p className="fs-5 fw-bold text-dark mb-0">
+                      {r.medicamento?.nombre || "No especificado"}
+                    </p>
+                  </div>
+                  
+                  <div className="mb-3">
+                    <h6 className="text-uppercase text-muted small fw-bold mb-1">Dosis y Duración</h6>
+                    <p className="text-primary fw-bold mb-0">
+                      {r.dosis} <span className="text-muted fw-normal">|</span> {r.duracion}
+                    </p>
+                  </div>
+                  
+                  <hr className="my-3 opacity-25" />
+                  
+                  <div>
+                    <h6 className="text-uppercase text-muted small fw-bold mb-1">Diagnóstico</h6>
+                    <p className="card-text text-secondary small bg-light p-2 rounded">
+                      {r.consulta?.diagnostico || "Sin diagnóstico registrado."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="card-footer bg-transparent border-0 text-center pb-3">
+                  <small className="text-muted italic" style={{ fontSize: '0.75rem' }}>
+                    Veterinaria Cuidando a tu mejor amigo
+                  </small>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
