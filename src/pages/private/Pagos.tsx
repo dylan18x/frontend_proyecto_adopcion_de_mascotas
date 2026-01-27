@@ -1,80 +1,92 @@
 import { useEffect, useState } from "react";
-import { pagoService } from "../../services/pago.service";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
+import { api } from "../../services/api";
 
-export default function Pagos() {
+export default function MisPagosPage() {
   const [pagos, setPagos] = useState<any[]>([]);
-  const [monto, setMonto] = useState("");
-  const [metodo, setMetodo] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const cargarPagos = async () => {
-    const res = await pagoService.getAll();
-    setPagos(res.data);
-  };
-
-  const guardarPago = async () => {
-    await pagoService.create({
-      monto: Number(monto),
-      metodo,
-      fecha: new Date(),
-    });
-    setMonto("");
-    setMetodo("");
-    cargarPagos();
+  const cargarMisPagos = async () => {
+    try {
+      setLoading(true);
+      // Este endpoint debe filtrar los pagos del usuario logueado en el backend
+      const res = await api.get("/pagos/mis-pagos");
+      setPagos(res.data.items || res.data || []);
+    } catch (error) {
+      console.error("Error al cargar tus pagos:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    cargarPagos();
+    cargarMisPagos();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Box>
-      <Typography variant="h5" mb={2}>Registro de Pagos</Typography>
+    <div className="container py-4">
+      <div className="row mb-4">
+        <div className="col">
+          <h2 className="fw-bold text-primary">📄 Mi Historial de Pagos</h2>
+          <p className="text-muted">Consulta aquí el registro de tus transacciones realizadas.</p>
+        </div>
+      </div>
 
-      <Box display="flex" gap={2} mb={3}>
-        <TextField
-          label="Monto"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value)}
-        />
-        <TextField
-          label="Método"
-          value={metodo}
-          onChange={(e) => setMetodo(e.target.value)}
-        />
-        <Button variant="contained" onClick={guardarPago}>
-          Guardar
-        </Button>
-      </Box>
-
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Monto</TableCell>
-            <TableCell>Método</TableCell>
-            <TableCell>Fecha</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+      {pagos.length === 0 ? (
+        <div className="alert alert-info shadow-sm border-0 text-center py-5">
+          <h4 className="alert-heading">Sin movimientos</h4>
+          <p className="mb-0">Aún no tienes pagos registrados en tu cuenta.</p>
+        </div>
+      ) : (
+        <div className="row g-4">
           {pagos.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>{p.monto}</TableCell>
-              <TableCell>{p.metodo}</TableCell>
-              <TableCell>{new Date(p.fecha).toLocaleDateString()}</TableCell>
-            </TableRow>
+            <div className="col-12 col-md-6 col-lg-4" key={p.id_pago}>
+              <div className="card h-100 border-0 shadow-sm rounded-4">
+                <div className="card-body p-4">
+                  <div className="d-flex justify-content-between align-items-start mb-3">
+                    <span className="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                      Completado
+                    </span>
+                    <small className="text-muted font-monospace">
+                      Ref: {p.id_pago.substring(0, 8)}
+                    </small>
+                  </div>
+
+                  <h3 className="fw-bold mb-3 text-dark">
+                    ${Number(p.monto).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                  </h3>
+
+                  <hr className="text-muted opacity-25" />
+
+                  <div className="d-flex flex-column gap-2">
+                    <div className="d-flex align-items-center text-secondary">
+                      <i className="bi bi-calendar-event me-2"></i>
+                      <span className="small">
+                        <strong>Fecha:</strong> {new Date(p.fecha).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="d-flex align-items-center text-secondary">
+                      <i className="bi bi-credit-card me-2"></i>
+                      <span className="small">
+                        <strong>Método:</strong> {p.metodo_pago}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
-        </TableBody>
-      </Table>
-    </Box>
+        </div>
+      )}
+    </div>
   );
 }
