@@ -1,5 +1,5 @@
 import { Alert, Button, Paper, Stack, TextField, Typography, Box } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Asegúrate de tener instalado @mui/icons-material
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -22,7 +22,7 @@ export default function Login(): JSX.Element {
     try {
       setError(null);
       await login({ username, password });
-      navigate(state.from || "/dashboard", { replace: true });
+      navigate(state.from || "/dashboard/mascotas", { replace: true });
     } catch {
       setError("Credenciales inválidas o error de servidor.");
     }
@@ -44,7 +44,6 @@ export default function Login(): JSX.Element {
         zIndex: 1200
       }}
     >
-      {/* BOTÓN VOLVER (Esquina superior izquierda) */}
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/")}
@@ -61,7 +60,6 @@ export default function Login(): JSX.Element {
         Volver al inicio
       </Button>
 
-      {/* Logo que también regresa a home */}
       <Box 
         onClick={() => navigate("/")}
         sx={{ 

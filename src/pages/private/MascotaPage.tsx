@@ -106,10 +106,18 @@ export default function MascotasPage() {
   };
 
   return (
-    <div className="container py-5">
+    <div className="container py-5" style={{ backgroundColor: "#f3e6d4" }}> {/* Fondo café medio */}
+      
+      <div className="p-4 mb-4" style={{ backgroundColor: "#2d4a22", color: "white", borderRadius: "12px" }}>
+        <h2 className="mb-2">🐾 Huellitas Felices 🐾</h2>
+        <p className="mb-0">
+          ¡Encuentra a tu nuevo amigo peludo! 🐶🐱 <br />
+          Ingresa tus datos y adopta una mascota disponible. 🏡💚
+        </p>
+      </div>
+
       <h3 className="text-success mb-4">Mascotas</h3>
 
-      {/* SOLO ADMIN AGREGA */}
       {isAdmin && (
         <div className="row mb-4">
           <div className="col">
@@ -217,7 +225,6 @@ export default function MascotasPage() {
         </tbody>
       </table>
 
-      {/* FORM ADOPCIÓN */}
       {adoptPetId && (
         <div className="card mt-4 p-3">
           <h5>Datos del cliente</h5>

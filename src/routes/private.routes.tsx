@@ -24,103 +24,25 @@ import MisPagosPage from "../pages/private/Pagos";
 export const privateRoutes: RouteObject = {
   path: "/dashboard",
   children: [
-    { index: true, element: <DashboardHome /> },
+    { path: "", element: <DashboardHome /> },
     { path: "mascotas", element: <MascotasPage /> },
     { path: "posts", element: <PostsPage /> },
-
     { path: "citas", element: <CitasPage /> },
-    {
-      path: "admin-citas",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <CitasAdminPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "admin-citas", element: (<RequireRole allow={["ADMIN"]}><CitasAdminPage /></RequireRole>), },
     { path: "consultas", element: <ConsultasPage /> },
-    {
-      path: "admin-consultas",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <ConsultasAdminPage />
-        </RequireRole>
-      ),
-    },
-    {
-      path: "admin-historial",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <HistorialMedicoAdminPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "admin-consultas", element: (<RequireRole allow={["ADMIN"]}><ConsultasAdminPage /></RequireRole>), },
+    { path: "admin-historial", element: (<RequireRole allow={["ADMIN"]}><HistorialMedicoAdminPage /></RequireRole>), },
     { path: "recetas", element: <RecetasPage /> },
-    {
-      path: "admin-recetas",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <RecetasAdminPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "admin-recetas", element: (<RequireRole allow={["ADMIN"]}><RecetasAdminPage /></RequireRole>), },
     { path: "vacunas", element: <VacunasPage /> },
-    {
-      path: "admin-vacunas",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <VacunasAdminPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "admin-vacunas", element: (<RequireRole allow={["ADMIN"]}><VacunasAdminPage /></RequireRole>), },
     { path: "mis-vacunaciones", element: <VacunacionesPage /> },
-    {
-      path: "vacunaciones",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <VacunacionesAdminPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "vacunaciones", element: (<RequireRole allow={["ADMIN"]}><VacunacionesAdminPage /></RequireRole>), },
     { path: "mis-pagos", element: <MisPagosPage /> },
-    {
-      path: "pagos",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <PagosAdminPage />
-        </RequireRole>
-      ),
-    },
-
-    {
-      path: "clientes",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <ClientesPage />
-        </RequireRole>
-      ),
-    },
-    {
-      path: "veterinarios",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <VeterinariosPage />
-        </RequireRole>
-      ),
-    },
-    {
-      path: "users",
-      element: (
-        <RequireRole allow={["ADMIN"]}>
-          <UsersPage />
-        </RequireRole>
-      ),
-    },
-
+    { path: "pagos", element: (<RequireRole allow={["ADMIN"]}><PagosAdminPage /></RequireRole>), },
+    { path: "clientes", element: (<RequireRole allow={["ADMIN"]}><ClientesPage /></RequireRole>), },
+    { path: "veterinarios", element: <VeterinariosPage />},
+    { path: "users", element: (<RequireRole allow={["ADMIN"]}><UsersPage /></RequireRole>), },
     { path: "forbidden", element: <Forbidden /> },
   ],
 };

@@ -18,7 +18,7 @@ export default function Register(): JSX.Element {
     try {
       setError(null);
       await register({ username, email, password });
-      navigate("/dashboard", { replace: true });
+      navigate("/dashboard/mascotas", { replace: true });
     } catch {
       setError("No se pudo registrar. Revisa los datos o intenta más tarde.");
     }
@@ -33,16 +33,15 @@ export default function Register(): JSX.Element {
         flexDirection: "column",
         justifyContent: "center", 
         alignItems: "center", 
-        background: "linear-gradient(135deg, #2d4a22 0%, #1a2a15 100%)", // Mismo verde que Landing y Login
+        background: "linear-gradient(135deg, #2d4a22 0%, #1a2a15 100%)",
         position: "fixed",
         top: 0,
         left: 0,
         zIndex: 1200,
-        overflowY: "auto", // Por si el formulario es largo en pantallas pequeñas
+        overflowY: "auto",
         py: 4
       }}
     >
-      {/* BOTÓN VOLVER AL INICIO */}
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/")}
@@ -59,7 +58,6 @@ export default function Register(): JSX.Element {
         Volver al inicio
       </Button>
 
-      {/* Identidad Visual */}
       <Box 
         onClick={() => navigate("/")}
         sx={{ 
@@ -145,7 +143,7 @@ export default function Register(): JSX.Element {
             sx={{ 
               py: 2, 
               borderRadius: "50px", 
-              bgcolor: "#8b4513", // Café terracota
+              bgcolor: "#8b4513", 
               fontWeight: "bold",
               textTransform: "none",
               fontSize: "1.1rem",
