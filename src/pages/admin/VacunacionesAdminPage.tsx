@@ -5,7 +5,7 @@ export default function VacunacionesAdminPage() {
   const [vacunaciones, setVacunaciones] = useState<any[]>([]);
   const [mascotas, setMascotas] = useState<any[]>([]);
   const [vacunas, setVacunas] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [editId, setEditId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
