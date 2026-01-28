@@ -15,6 +15,7 @@ import HealingIcon from "@mui/icons-material/Healing";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import PaymentsIcon from "@mui/icons-material/Payments";
+import MedicationIcon from "@mui/icons-material/Mediation";
 
 const drawerWidth = 260;
 
