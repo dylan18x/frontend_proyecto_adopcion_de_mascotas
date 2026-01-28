@@ -1,6 +1,5 @@
 import { api } from "./api";
 
-// Definición clara del objeto Consulta
 export type ConsultaDto = {
   id: string;
   diagnostico: string;
@@ -13,7 +12,6 @@ export type ConsultaDto = {
   }; 
 };
 
-// Estructura de paginación que devuelve NestJS
 type PaginationResponse<T> = {
   items: T[];
   meta: {
@@ -27,7 +25,7 @@ type PaginationResponse<T> = {
 
 // 1. Obtener todas (Admin)
 export async function getConsultas(): Promise<ConsultaDto[]> {
-  const { data } = await api.get<PaginationResponse<ConsultaDto>>("/consulta", {
+  const { data } = await api.get<PaginationResponse<ConsultaDto>>("/consultas", {
     params: { limit: 100, page: 1 }
   });
   return data.items;
@@ -35,7 +33,7 @@ export async function getConsultas(): Promise<ConsultaDto[]> {
 
 // 2. Obtener solo las del usuario logueado
 export async function getMisConsultas(): Promise<ConsultaDto[]> {
-  const { data } = await api.get<PaginationResponse<ConsultaDto>>("/consulta/mis-mascotas");
+  const { data } = await api.get<PaginationResponse<ConsultaDto>>("/consultas/mis-mascotas");
   return data.items;
 }
 
@@ -47,19 +45,17 @@ export async function getCitasDisponibles(): Promise<any[]> {
   return data.items;
 }
 
-// 4. Crear: Omitimos 'id' porque lo genera la DB y 'cita' porque es la relación de retorno
 export async function createConsulta(data: Omit<ConsultaDto, "id" | "cita">): Promise<ConsultaDto> {
-  const response = await api.post<ConsultaDto>("/consulta", data);
+  const response = await api.post<ConsultaDto>("/consultas", data);
   return response.data;
 }
 
-// 5. Actualizar: Permitimos enviar solo algunos campos
 export async function updateConsulta(id: string, data: Partial<Omit<ConsultaDto, "id" | "cita">>): Promise<ConsultaDto> {
-  const response = await api.put<ConsultaDto>(`/consulta/${id}`, data);
+  const response = await api.put<ConsultaDto>(`/consultas/${id}`, data);
   return response.data;
 }
 
-// 6. Eliminar
+
 export async function deleteConsulta(id: string): Promise<void> {
-  await api.delete(`/consulta/${id}`);
+  await api.delete(`/consultas/${id}`);
 }
