@@ -25,19 +25,15 @@ const navItems: NavItem[] = [
   { label: "Inicio", to: "/dashboard", icon: <DashboardIcon /> },
   { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> },
   
-  // --- SECCIÓN RECETAS ---
   { label: "Mis Recetas", to: "/dashboard/recetas", icon: <ReceiptLongIcon />, roles: ["USER"] },
   { label: "Gestionar Recetas", to: "/dashboard/admin-recetas", icon: <MedicationIcon />, roles: ["ADMIN"] },
   
-  // --- SECCIÓN VACUNAS ---
   { label: "Catálogo Vacunas", to: "/dashboard/vacunas", icon: <VaccinesIcon />, roles: ["USER"] },
   { label: "Gestionar Vacunas", to: "/dashboard/admin-vacunas", icon: <VaccinesIcon />, roles: ["ADMIN"] },
   
-  // --- SECCIÓN VACUNACIONES ---
   { label: "Mis Vacunaciones", to: "/dashboard/mis-vacunaciones", icon: <VaccinesIcon />, roles: ["USER"] },
   { label: "Control Vacunaciones", to: "/dashboard/vacunaciones", icon: <VaccinesIcon />, roles: ["ADMIN"] },
 
-  // --- SECCIÓN PAGOS ---
   { label: "Mis Pagos", to: "/dashboard/mis-pagos", icon: <ReceiptLongIcon />, roles: ["USER"] },
   { label: "Gestión de Pagos", to: "/dashboard/pagos", icon: <PaymentsIcon />, roles: ["ADMIN"] },
 
