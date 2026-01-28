@@ -1,4 +1,4 @@
-import { Alert, Button, Paper, Stack, TextField, Typography, Box, IconButton } from "@mui/material";
+import { Alert, Button, Paper, Stack, TextField, Typography, Box } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Asegúrate de tener instalado @mui/icons-material
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

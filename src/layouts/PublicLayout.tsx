@@ -13,10 +13,7 @@ export default function PublicLayout(): JSX.Element {
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
       
-      {/* CAMBIO AQUÍ: No mostrar el header si es Landing O si es Auth (Login/Register) */}
       {!isLanding && !isAuth && <PublicHeader />}
-
-      {/* Eliminamos el Toolbar/espacio solo si es Landing o Auth */}
       {!isLanding && !isAuth && <Box sx={{ height: "64px" }} />}
 
       {isLanding ? (
@@ -25,7 +22,7 @@ export default function PublicLayout(): JSX.Element {
         <Container 
           maxWidth={isAuth ? "sm" : "md"} 
           sx={{ 
-            py: isAuth ? 0 : 3, // Quitamos el padding extra en Auth para controlarlo nosotros
+            py: isAuth ? 0 : 3, 
             display: isAuth ? "flex" : "block",
             flexDirection: "column",
             justifyContent: "center",
@@ -35,8 +32,6 @@ export default function PublicLayout(): JSX.Element {
           <Outlet />
         </Container>
       )}
-
-      {/* CAMBIO AQUÍ: El footer viejo también estorba en la estética de la Landing y Auth */}
       {!isLanding && !isAuth && <PublicFooter />}
     </Box>
   );

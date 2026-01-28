@@ -5,7 +5,6 @@ export default function ClientesPage() {
   const [clients, setClients] = useState<ClientDto[]>([]);
   const [search, setSearch] = useState("");
 
-  // Campos del formulario para añadir
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -46,13 +45,12 @@ export default function ClientesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    await deleteClient(id);
-    loadClients();
+    setClients(prev => prev.filter(c => c.id !== id));
+    deleteClient(id).catch(() => loadClients());
   };
 
   return (
     <div className="container py-5">
-      {/* Formulario Añadir */}
       <div className="row mb-4 align-items-center">
         <div className="col-md-2"><input className="form-control" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} /></div>
         <div className="col-md-2"><input className="form-control" placeholder="Cédula" value={cedula} onChange={e => setCedula(e.target.value)} /></div>

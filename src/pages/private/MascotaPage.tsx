@@ -78,9 +78,10 @@ export default function MascotasPage() {
   };
 
   const removePet = async (id: string) => {
-    if (!confirm("¿Eliminar mascota?")) return;
-    await deleteMascota(id);
-    loadPets();
+    // Borrado instantáneo del estado (UI)
+    setPets(prev => prev.filter(p => p.id !== id));
+    // Borrado en servidor sin bloquear la vista
+    deleteMascota(id).catch(() => loadPets());
   };
 
   const startAdopt = (id: string) => {
