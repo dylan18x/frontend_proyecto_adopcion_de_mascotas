@@ -25,31 +25,32 @@ type NavItem = { label: string; to: string; icon: JSX.Element; roles?: string[] 
 const navItems: NavItem[] = [
   { label: "Inicio", to: "/dashboard", icon: <DashboardIcon /> },
   { label: "Mascotas", to: "/dashboard/mascotas", icon: <PetsIcon /> },
-  
+
   // --- CITAS ---
   { label: "Citas", to: "/dashboard/citas", icon: <EventIcon />, roles: ["USER"] },
   { label: "Citas", to: "/dashboard/admin-citas", icon: <EventIcon />, roles: ["ADMIN"] },
-  
+
   // --- CONSULTAS ---
   { label: "Consultas", to: "/dashboard/consultas", icon: <HealingIcon />, roles: ["USER"] },
   { label: "Consulta", to: "/dashboard/admin-consultas", icon: <MedicalServicesIcon />, roles: ["ADMIN"] },
 
   // --- HISTORIAL MÉDICO (SOLO ADMIN) ---
   { label: "Historial medico", to: "/dashboard/admin-historial", icon: <HistoryEduIcon />, roles: ["ADMIN"] },
-  
+
   // --- RECETAS ---
   { label: "Recetas", to: "/dashboard/recetas", icon: <ReceiptLongIcon />, roles: ["USER"] },
   { label: "Recetas", to: "/dashboard/admin-recetas", icon: <MedicationIcon />, roles: ["ADMIN"] },
-  
+
   // --- FACTURACIÓN (SOLO ADMIN) ---
+  { label: "Mis Pagos", to: "/dashboard/mis-pagos", icon: <ReceiptLongIcon />, roles: ["USER"] },
   { label: "Facturación", to: "/dashboard/pagos", icon: <PaymentsIcon />, roles: ["ADMIN"] },
-  
+
   // --- VACUNACIONES ---
   { label: "Vacunaciones", to: "/dashboard/mis-vacunaciones", icon: <VaccinesIcon />, roles: ["USER"] },
   { label: "Vacunaciones", to: "/dashboard/vacunaciones", icon: <VaccinesIcon />, roles: ["ADMIN"] },
-  
+
   { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
-  
+
   // --- ADMINISTRACIÓN ---
   { label: "Clientes", to: "/dashboard/clientes", icon: <PersonIcon />, roles: ["ADMIN"] },
   { label: "Veterinarios", to: "/dashboard/veterinarios", icon: <MedicalServicesIcon />, roles: ["ADMIN"] },
