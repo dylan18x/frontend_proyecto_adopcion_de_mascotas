@@ -17,6 +17,7 @@ import VaccinesIcon from "@mui/icons-material/Vaccines";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import MedicationIcon from "@mui/icons-material/Mediation";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import ScienceIcon from "@mui/icons-material/Science";
 
 const drawerWidth = 260;
 
@@ -50,7 +51,8 @@ const navItems: NavItem[] = [
   // --- VACUNACIONES ---
   { label: "Vacunaciones", to: "/dashboard/mis-vacunaciones", icon: <VaccinesIcon />, roles: ["USER"] },
   { label: "Vacunaciones", to: "/dashboard/vacunaciones", icon: <VaccinesIcon />, roles: ["ADMIN"] },
-
+  { label: "Vacunas", to: "/dashboard/vacunas", icon:<ScienceIcon/>, roles: ["USER"] },
+  { label: "Vacunas", to: "/dashboard/admin-vacunas", icon: <ScienceIcon/>, roles: ["ADMIN"] },
   { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
 
   // --- ADMINISTRACIÓN ---
