@@ -18,8 +18,8 @@ import VacunasPage from "../pages/private/VacunasPage";
 import VacunasAdminPage from "../pages/admin/VacunasAdminPage";
 import VacunacionesPage from "../pages/private/VacunacionesPage";
 import VacunacionesAdminPage from "../pages/admin/VacunacionesAdminPage";
-import PagosAdminPage from "../pages/admin/PagosAdminPage";
 import MisPagosPage from "../pages/private/Pagos";
+import MedicamentosPage from "../pages/private/MedicamentosPage";
 
 export const privateRoutes: RouteObject = {
   path: "/dashboard",
@@ -38,8 +38,8 @@ export const privateRoutes: RouteObject = {
     { path: "admin-vacunas", element: (<RequireRole allow={["ADMIN"]}><VacunasAdminPage /></RequireRole>), },
     { path: "mis-vacunaciones", element: <VacunacionesPage /> },
     { path: "vacunaciones", element: (<RequireRole allow={["ADMIN"]}><VacunacionesAdminPage /></RequireRole>), },
-    { path: "mis-pagos", element: <MisPagosPage /> },
-    { path: "pagos", element: (<RequireRole allow={["ADMIN"]}><PagosAdminPage /></RequireRole>), },
+    { path: "pagos", element:<MisPagosPage />},
+    { path: "medicamentos", element:<MedicamentosPage />},
     { path: "clientes", element: (<RequireRole allow={["ADMIN"]}><ClientesPage /></RequireRole>), },
     { path: "veterinarios", element: <VeterinariosPage />},
     { path: "users", element: (<RequireRole allow={["ADMIN"]}><UsersPage /></RequireRole>), },

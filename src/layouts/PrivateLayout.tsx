@@ -33,6 +33,8 @@ const navItems: NavItem[] = [
   // --- CONSULTAS ---
   { label: "Consultas", to: "/dashboard/consultas", icon: <HealingIcon />, roles: ["USER"] },
   { label: "Consulta", to: "/dashboard/admin-consultas", icon: <MedicalServicesIcon />, roles: ["ADMIN"] },
+// --- MEDICAMENTOS ---
+  { label: "Medicamentos", to: "/dashboard/medicamentos", icon: <MedicationIcon />},
 
   // --- HISTORIAL MÉDICO (SOLO ADMIN) ---
   { label: "Historial medico", to: "/dashboard/admin-historial", icon: <HistoryEduIcon />, roles: ["ADMIN"] },

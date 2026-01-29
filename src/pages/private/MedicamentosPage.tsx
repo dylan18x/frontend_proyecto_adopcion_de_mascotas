@@ -1,81 +1,142 @@
 import { useEffect, useState, useMemo } from "react";
-import { getMedicamentos, type MedicamentoDto } from "../../services/medicamentos.service";
+import { useAuth } from "../../context/AuthContext";
+import { 
+  getMedicamentos, createMedicamento, updateMedicamento, deleteMedicamento, 
+  type MedicamentoDto 
+} from "../../services/medicamentos.service";
 
 export default function MedicamentosPage() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
+
   const [meds, setMeds] = useState<MedicamentoDto[]>([]);
   const [search, setSearch] = useState("");
 
+  // Inputs para crear o editar
+  const [nombre, setNombre] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [precio, setPrecio] = useState<number>(0);
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Cargar medicamentos
+  const loadMeds = async () => {
+    const data = await getMedicamentos();
+    setMeds(data || []);
+  };
+
   useEffect(() => {
-    getMedicamentos().then((data) => {
-      if (data) setMeds(data);
-    });
+    loadMeds();
   }, []);
 
   const filteredMeds = useMemo(() => {
-    const list = meds || [];
-    return list.filter(m => 
-      m.nombre?.toLowerCase().includes(search.toLowerCase()) ||
-      m.descripcion?.toLowerCase().includes(search.toLowerCase())
+    return meds.filter(m =>
+      m.nombre.toLowerCase().includes(search.toLowerCase()) ||
+      m.descripcion.toLowerCase().includes(search.toLowerCase())
     );
   }, [meds, search]);
 
+  // Añadir medicamento
+  const handleAdd = async () => {
+    if (!nombre || !descripcion || precio <= 0) return;
+    await createMedicamento({ nombre, descripcion, precio });
+    setNombre(""); setDescripcion(""); setPrecio(0);
+    loadMeds();
+  };
+
+  // Empezar a editar
+  const startEdit = (m: MedicamentoDto) => {
+    setEditingId(m.id);
+    setNombre(m.nombre);
+    setDescripcion(m.descripcion);
+    setPrecio(m.precio);
+  };
+
+  // Guardar edición
+  const saveEdit = async () => {
+    if (!editingId) return;
+    await updateMedicamento(editingId, { nombre, descripcion, precio });
+    setEditingId(null);
+    setNombre(""); setDescripcion(""); setPrecio(0);
+    loadMeds();
+  };
+
+  // Eliminar
+  const handleDelete = async (id: string) => {
+    setMeds(prev => prev.filter(m => m.id !== id));
+    deleteMedicamento(id).catch(() => loadMeds());
+  };
+
   return (
-    <div className="container py-5">
-      <div className="row mb-4 align-items-center">
-        <div className="col-md-7">
-          <h1 className="h2" style={{ color: '#2d6a4f' }}>
-            💊 Farmacia e Inventario
-          </h1>
-          <p className="text-muted">Listado de medicamentos disponibles</p>
-        </div>
-        <div className="col-md-5">
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white border-end-0">🔍</span>
-            <input 
-              type="text" 
-              className="form-control border-start-0" 
-              placeholder="Buscar medicamento..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-        </div>
+    <div className="container py-5" style={{ backgroundColor: "#f3e6d4" }}>
+      
+      <div className="p-4 mb-4" style={{ backgroundColor: "#2d6a4f", color: "white", borderRadius: "12px" }}>
+        <h2 className="mb-2">💊 Farmacia e Inventario</h2>
+        <p className="mb-0">
+          Consulta los medicamentos disponibles y, si eres administrador, gestiona el inventario.
+        </p>
       </div>
 
-      <div className="card border-0 shadow-sm">
-        <div className="card-body p-0">
-          <div className="table-responsive">
-            <table className="table table-hover mb-0">
-              <thead style={{ backgroundColor: '#d8f3dc' }}>
-                <tr>
-                  <th className="px-4 py-3">Nombre del Medicamento</th>
-                  <th className="py-3">Descripción / Presentación</th>
-                  <th className="py-3 text-end px-4">Precio Unitario</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMeds.length > 0 ? (
-                  filteredMeds.map(m => (
-                    <tr key={m.id}>
-                      <td className="px-4 py-3 fw-bold">{m.nombre}</td>
-                      <td className="py-3 text-secondary">{m.descripcion}</td>
-                      <td className="py-3 text-end px-4 fw-bold text-success">
-                        ${Number(m.precio).toFixed(2)}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center py-5 text-muted">
-                      No se encontró el medicamento: "{search}"
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+      {isAdmin && (
+        <div className="row mb-4">
+          <div className="col">
+            <input className="form-control" placeholder="Nombre"
+              value={nombre} onChange={e => setNombre(e.target.value)} />
+          </div>
+          <div className="col">
+            <input className="form-control" placeholder="Descripción"
+              value={descripcion} onChange={e => setDescripcion(e.target.value)} />
+          </div>
+          <div className="col">
+            <input className="form-control" placeholder="Precio"
+              type="number" value={precio} onChange={e => setPrecio(Number(e.target.value))} />
+          </div>
+          <div className="col">
+            {editingId ? (
+              <button className="btn btn-warning w-100" onClick={saveEdit}>
+                Guardar
+              </button>
+            ) : (
+              <button className="btn btn-success w-100" onClick={handleAdd}>
+                Añadir
+              </button>
+            )}
           </div>
         </div>
-      </div>
+      )}
+
+      <input className="form-control mb-3"
+        placeholder="Buscar medicamento..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+      />
+
+      <table className="table table-hover">
+        <thead className="table-success">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th className="text-end">Precio</th>
+            {isAdmin && <th className="text-end">Acciones</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {filteredMeds.map(m => (
+            <tr key={m.id}>
+              <td>{m.nombre}</td>
+              <td>{m.descripcion}</td>
+              <td className="text-end">${Number(m.precio).toFixed(2)}</td>
+              {isAdmin && (
+                <td className="text-end d-flex gap-2 justify-content-end">
+                  <button className="btn btn-sm btn-warning" onClick={() => startEdit(m)}>Editar</button>
+                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(m.id)}>Eliminar</button>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </div>
   );
 }
