@@ -1,9 +1,9 @@
 import { useMemo } from "react";
+import adopImg from "../public/images/adop.jpg";
 
 export default function DashboardHome() {
-  const fundadores = ["Dylan Fernández", "Michael Lidioma", "Mateo Mancheo", "Jossue Guerrero"];
+  const fundadores = ["Dylan Fernández", "Michael Lidioma", "Mateo Mancheno", "Jossue Guerrero"];
 
-  // Simulamos datos para las estadísticas
   const stats = useMemo(() => [
     { label: "Mascotas Rescatadas", value: "124", color: "text-primary", icon: "🐾" },
     { label: "Adopciones Exitosas", value: "89", color: "text-success", icon: "🏠" },
@@ -12,7 +12,6 @@ export default function DashboardHome() {
 
   return (
     <div className="container-fluid py-4">
-      {/* Encabezado Principal */}
       <div className="row mb-4">
         <div className="col-12">
           <div className="p-5 mb-4 bg-success text-white rounded-4 shadow-sm position-relative overflow-hidden" 
@@ -31,7 +30,6 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      {/* Tarjetas de Estadísticas */}
       <div className="row g-4 mb-5">
         {stats.map((stat, index) => (
           <div className="col-md-4" key={index}>
@@ -48,7 +46,6 @@ export default function DashboardHome() {
         ))}
       </div>
 
-      {/* Sección de la Empresa y Fundadores */}
       <div className="row">
         <div className="col-lg-8">
           <div className="card border-0 shadow-sm rounded-4 mb-4">
@@ -75,14 +72,16 @@ export default function DashboardHome() {
         </div>
 
         <div className="col-lg-4">
-          <div className="card border-0 shadow-sm rounded-4 bg-warning-subtle h-100">
-            <div className="card-body p-4 text-center d-flex flex-column justify-content-center">
-              <h1 className="mb-3">📢</h1>
-              <h5 className="fw-bold">Aviso del Sistema</h5>
-              <p className="small text-dark-emphasis">
-                El menú lateral (Drawer) se está cargando en la estructura principal. 
-                Utiliza las rutas de la izquierda para navegar entre Mascotas, Usuarios y Pagos.
-              </p>
+          <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100 position-relative">
+            <img 
+              src={adopImg} 
+              alt="Adopción" 
+              className="position-absolute w-100 h-100" 
+              style={{ objectFit: "cover", zIndex: 0 }}
+            />
+            <div className="card-body p-4 text-center d-flex flex-column justify-content-center position-relative" 
+                 style={{ zIndex: 1, background: "rgba(0,0,0,0.5)", color: "white" }}>
+              
             </div>
           </div>
         </div>
