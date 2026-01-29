@@ -1,208 +1,146 @@
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
-export default function DonacionesPage() {
-  const [donaciones, setDonaciones] = useState<any[]>([]);
+export default function PagosPage() {
+  const { user } = useAuth();
+  const [pagos, setPagos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     fecha: new Date().toISOString().split('T')[0],
-    cantidad: "",
-    metodo: ""
+    monto: "",
+    metodo_pago: "",
+    username_donante: "" 
   });
 
-  // Cargar todas las donaciones
   const cargarDatos = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/donaciones");
-      setDonaciones(res.data.items || res.data || []);
+      const res = await api.get("/pagos");
+      // Manejamos la estructura de items del backend
+      const data = res.data.items || (Array.isArray(res.data) ? res.data : []);
+      setPagos(data);
     } catch (error) {
-      console.error("Error al cargar donaciones:", error);
+      console.error("Error al cargar:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
+  useEffect(() => { cargarDatos(); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const payload = {
       fecha: formData.fecha,
-      cantidad: parseFloat(formData.cantidad),
-      metodo: formData.metodo
+      monto: Number(formData.monto),
+      metodo_pago: formData.metodo_pago,
+      // Enviamos el username_donante que el backend ya aceptó
+      username_donante: user?.username || formData.username_donante || "anonimo"
     };
 
     try {
       if (editId) {
-        await api.put(`/donaciones/${editId}`, payload);
-        alert("¡Donación actualizada!");
+        await api.put(`/pagos/${editId}`, payload);
       } else {
-        await api.post("/donaciones", payload);
-        alert("¡Donación registrada!");
+        await api.post("/pagos", payload);
       }
       resetForm();
       cargarDatos();
-    } catch (error: any) {
-      console.error(error.response?.data);
-      alert("Error al procesar la donación.");
+      alert("Pago registrado correctamente");
+    } catch (error) {
+      alert("Error al guardar en el servidor");
     }
   };
 
-  const prepararEdicion = (d: any) => {
-    setEditId(d.id_donacion);
+  const prepararEdicion = (p: any) => {
+    setEditId(p.id_pago);
     setFormData({
-      fecha: d.fecha ? d.fecha.split('T')[0] : "",
-      cantidad: d.cantidad.toString(),
-      metodo: d.metodo
+      fecha: p.fecha.split('T')[0],
+      monto: p.monto.toString(),
+      metodo_pago: p.metodo_pago,
+      username_donante: p.username_donante || p.usuario?.username || ""
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const eliminarDonacion = async (id: string) => {
-    if (!confirm("¿Seguro que deseas eliminar esta donación?")) return;
-    try {
-      await api.delete(`/donaciones/${id}`);
-      cargarDatos();
-    } catch {
-      alert("Error al eliminar.");
-    }
   };
 
   const resetForm = () => {
     setEditId(null);
     setFormData({
       fecha: new Date().toISOString().split('T')[0],
-      cantidad: "",
-      metodo: ""
+      monto: "",
+      metodo_pago: "",
+      username_donante: ""
     });
   };
 
-  // Calculamos top de donadores por ID (suma de sus donaciones)
-  const topDonadores = Object.values(
-    donaciones.reduce((acc: any, d: any) => {
-      const id = d.id_cliente || "Anonimo";
-      if (!acc[id]) acc[id] = { id, total: 0 };
-      acc[id].total += d.cantidad;
-      return acc;
-    }, {})
-  ).sort((a: any, b: any) => b.total - a.total).slice(0, 5); // top 5
-
   return (
-    <div className="container mt-4">
-
-      {/* Top Donadores */}
-      {topDonadores.length > 0 && (
-        <div className="mb-4">
-          <h4 className="fw-bold text-primary">🏆 Top Donadores</h4>
-          <ul className="list-group list-group-flush">
-            {topDonadores.map((d: any) => (
-              <li key={d.id} className="list-group-item d-flex justify-content-between align-items-center">
-                {d.id}
-                <span className="fw-bold text-success">${d.total.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Formulario de Donaciones */}
-      <div className="card border-0 shadow-sm mb-5 bg-light">
-        <div className="card-body p-4">
-          <form onSubmit={handleSubmit} className="row g-3">
-            <div className="col-md-4">
-              <label className="form-label small fw-bold text-secondary">CANTIDAD ($)</label>
-              <input
-                type="number" step="0.01"
-                className="form-control border-0 shadow-sm"
-                placeholder="0.00"
-                value={formData.cantidad}
-                onChange={(e) => setFormData({ ...formData, cantidad: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="col-md-4">
-              <label className="form-label small fw-bold text-secondary">MÉTODO</label>
-              <select
-                className="form-select border-0 shadow-sm"
-                value={formData.metodo}
-                onChange={(e) => setFormData({ ...formData, metodo: e.target.value })}
-                required
-              >
-                <option value="">-- Seleccionar --</option>
-                <option value="Efectivo">Efectivo</option>
-                <option value="Transferencia">Transferencia</option>
-                <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-              </select>
-            </div>
-
-            <div className="col-md-2">
-              <label className="form-label small fw-bold text-secondary">FECHA</label>
-              <input
-                type="date"
-                className="form-control border-0 shadow-sm"
-                value={formData.fecha}
-                onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="col-12 text-end mt-4">
-              {editId && (
-                <button type="button" className="btn btn-outline-secondary me-2 px-4" onClick={resetForm}>
-                  CANCELAR
-                </button>
-              )}
-              <button type="submit" className={`btn px-5 fw-bold text-white shadow-sm ${editId ? 'btn-warning' : 'btn-success'}`}>
-                {editId ? "ACTUALIZAR DONACIÓN" : "DONAR"}
+    <div className="container py-4">
+      <div className="row g-4">
+        <div className="col-md-5">
+          <div className="card shadow-sm border-0 p-4">
+            <h4 className="fw-bold mb-4">Donación</h4>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label small fw-bold">USERNAME</label>
+                <input 
+                  type="text" 
+                  className="form-control bg-light" 
+                  value={user?.username || formData.username_donante} 
+                  disabled={!!user}
+                  onChange={(e) => setFormData({...formData, username_donante: e.target.value})}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label small fw-bold">MONTO ($)</label>
+                <input type="number" className="form-control" value={formData.monto}
+                  onChange={(e) => setFormData({...formData, monto: e.target.value})} required />
+              </div>
+              <div className="mb-3">
+                <label className="form-label small fw-bold">MÉTODO</label>
+                <select className="form-select" value={formData.metodo_pago}
+                  onChange={(e) => setFormData({...formData, metodo_pago: e.target.value})} required>
+                  <option value="">Seleccionar...</option>
+                  <option value="tarjeta">Tarjeta</option>
+                  <option value="efectivo">Efectivo</option>
+                </select>
+              </div>
+              <button type="submit" className="btn btn-primary w-100 rounded-pill">
+                {editId ? 'ACTUALIZAR' : 'ENVIAR'}
               </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
 
-      {/* Historial de Donaciones */}
-      <div className="table-responsive bg-white rounded-4 shadow-sm">
-        <table className="table table-hover align-middle mb-0">
-          <thead className="table-dark">
-            <tr>
-              <th className="ps-4">ID Donante</th>
-              <th className="text-center">Cantidad</th>
-              <th className="text-center">Método</th>
-              <th className="text-center">Fecha</th>
-              <th className="text-center pe-4">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan={5} className="py-5 text-center text-muted">Cargando donaciones...</td></tr>
-            ) : donaciones.length === 0 ? (
-              <tr><td colSpan={5} className="py-5 text-center text-muted">No hay donaciones registradas.</td></tr>
-            ) : donaciones.map((d) => (
-              <tr key={d.id_donacion}>
-                <td className="ps-4">{d.id_cliente || "Anonimo"}</td>
-                <td className="text-center text-success fw-bold">
-                  ${Number(d.cantidad).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                </td>
-                <td className="text-center">
-                  <span className="badge rounded-pill bg-light text-dark border px-3">{d.metodo}</span>
-                </td>
-                <td className="text-center text-secondary">
-                  {new Date(d.fecha).toLocaleDateString()}
-                </td>
-                <td className="text-center pe-4">
-                  <button className="btn btn-sm btn-outline-warning me-2" onClick={() => prepararEdicion(d)}>Editar</button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={() => eliminarDonacion(d.id_donacion)}>Borrar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="col-md-7">
+          <div className="card shadow-sm border-0 overflow-hidden">
+            <table className="table align-middle mb-0">
+              <thead className="table-dark">
+                <tr>
+                  <th className="ps-4">Usuario</th>
+                  <th>Monto</th>
+                  <th className="text-end pe-4">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pagos.map((p) => (
+                  <tr key={p.id_pago}>
+                    <td className="ps-4">
+                      {/* Leemos el username del nuevo campo o del objeto usuario */}
+                      <span className="fw-bold">{p.username_donante || p.usuario?.username || "Anónimo"}</span>
+                    </td>
+                    <td className="text-success fw-bold">${Number(p.monto).toFixed(2)}</td>
+                    <td className="text-end pe-4">
+                      <button className="btn btn-sm btn-outline-warning" onClick={() => prepararEdicion(p)}>Editar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
