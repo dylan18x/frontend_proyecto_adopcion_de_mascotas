@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import UserStatusToggle from './UserStatusToggle';
 
 describe("UserStatusToggle", () => {
-  test("debe disparar la función onToggle al hacer click", () => {
+  test("Sad path: debe disparar la función onToggle al hacer click", () => {
     const mockToggle = jest.fn();
     render(<UserStatusToggle isActive={true} onToggle={mockToggle} />);
     

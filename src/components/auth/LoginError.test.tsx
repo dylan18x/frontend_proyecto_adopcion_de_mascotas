@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import LoginError from './LoginError';
 
 describe("LoginError", () => {
-  test("debe renderizar el mensaje de error de credenciales", () => {
+  test("Sad path: renderizar el mensaje de error de credenciales", () => {
     const errorMsg = "Usuario o contraseña incorrectos";
     render(<LoginError message={errorMsg} />);
     
