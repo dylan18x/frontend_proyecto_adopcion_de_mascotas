@@ -23,3 +23,4 @@ usuario: admin
 contraseña: admin123
 
 Para el panel de usuario se puede registrar y ya esta disponible
+
