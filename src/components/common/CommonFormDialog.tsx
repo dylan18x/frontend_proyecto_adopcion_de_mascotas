@@ -1,37 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
-import type { JSX } from "react";
+import { Modal, Button } from 'react-bootstrap';
 
-type Props = {
-  open: boolean;
-  title: string;
-  description: string;
-  confirmText?: string;
-  cancelText?: string;
-  onCancel: () => void;
-  onConfirm: () => void;
-};
-
-export default function ConfirmDialog({
-  open,
-  title,
-  description,
-  confirmText = "Eliminar",
-  cancelText = "Cancelar",
-  onCancel,
-  onConfirm,
-}: Props): JSX.Element {
+export default function CommonFormDialog({ open, title, description, onCancel, onConfirm }: any) {
   return (
-    <Dialog open={open} onClose={onCancel} fullWidth maxWidth="xs">
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <Typography>{description}</Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onCancel}>{cancelText}</Button>
-        <Button onClick={onConfirm} variant="contained" color="error">
-          {confirmText}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Modal show={open} onHide={onCancel} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{description}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+        <Button variant="danger" onClick={onConfirm}>Eliminar</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
