@@ -53,12 +53,10 @@ const navItems: NavItem[] = [
   { label: "Vacunaciones", to: "/dashboard/vacunaciones", icon: <VaccinesIcon />, roles: ["ADMIN"] },
   { label: "Vacunas", to: "/dashboard/vacunas", icon:<ScienceIcon/>, roles: ["USER"] },
   { label: "Vacunas", to: "/dashboard/admin-vacunas", icon: <ScienceIcon/>, roles: ["ADMIN"] },
-  { label: "Posts", to: "/dashboard/posts", icon: <ArticleIcon /> },
 
   // --- ADMINISTRACIÓN ---
   { label: "Clientes", to: "/dashboard/clientes", icon: <PersonIcon />, roles: ["ADMIN"] },
   { label: "Veterinarios", to: "/dashboard/veterinarios", icon: <MedicalServicesIcon />, roles: ["ADMIN"] },
-  { label: "Usuarios Sistema", to: "/dashboard/users", icon: <GroupIcon />, roles: ["ADMIN"] },
 ];
 
 export default function PrivateLayout(): JSX.Element {
