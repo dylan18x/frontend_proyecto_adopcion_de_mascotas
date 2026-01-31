@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import PostFormDialog from './PostFormDialog';
 
 describe("PostFormDialog", () => {
-  test("enviar el titulo y contenidp", () => {
+  test("Sad path: enviar el titulo y contenidp", () => {
     const mockSubmit = jest.fn();
     render(<PostFormDialog open={true} onSubmit={mockSubmit} onClose={() => {}} />);
     
