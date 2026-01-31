@@ -46,7 +46,7 @@ const navItems: NavItem[] = [
 
   // --- FACTURACIÓN (SOLO ADMIN) ---
   { label: "Mis Pagos", to: "/dashboard/mis-pagos", icon: <ReceiptLongIcon />, roles: ["USER"] },
-  { label: "Facturación", to: "/dashboard/pagos", icon: <PaymentsIcon />, roles: ["ADMIN"] },
+  { label: "Donaciones", to: "/dashboard/pagos", icon: <PaymentsIcon />, roles: ["ADMIN"] },
 
   // --- VACUNACIONES ---
   { label: "Vacunaciones", to: "/dashboard/mis-vacunaciones", icon: <VaccinesIcon />, roles: ["USER"] },
