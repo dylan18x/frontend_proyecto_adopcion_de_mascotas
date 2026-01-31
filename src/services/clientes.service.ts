@@ -13,20 +13,30 @@ type PaginationResponse<T> = {
   meta: any;
 };
 
-// GET
-export async function getClients(): Promise<ClientDto[]> {
-  const { data } = await api.get<PaginationResponse<ClientDto>>("/clientes");
+// 👉 TRAER TODOS LOS CLIENTES
+export async function getClients(
+  page = 1,
+  limit = 1000
+): Promise<ClientDto[]> {
+  const { data } = await api.get<PaginationResponse<ClientDto>>(
+    `/clientes?page=${page}&limit=${limit}`
+  );
   return data.items;
 }
 
 // CREATE
-export async function createClient(client: Omit<ClientDto, "id">): Promise<ClientDto> {
+export async function createClient(
+  client: Omit<ClientDto, "id">
+): Promise<ClientDto> {
   const { data } = await api.post<ClientDto>("/clientes", client);
   return data;
 }
 
 // UPDATE
-export async function updateClient(id: string, client: Omit<ClientDto, "id">): Promise<ClientDto> {
+export async function updateClient(
+  id: string,
+  client: Omit<ClientDto, "id">
+): Promise<ClientDto> {
   const { data } = await api.put<ClientDto>(`/clientes/${id}`, client);
   return data;
 }
